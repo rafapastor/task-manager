@@ -1,0 +1,13 @@
+# Ignorar archivos y directorios generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar directorios específicos
+/backend/target/
+/frontend/node_modules/
+/frontend/dist/
+
+# Ignorar archivos de configuración específicos
+/backend/.vscode/
+/frontend/.vscode/
+/frontend/.env
