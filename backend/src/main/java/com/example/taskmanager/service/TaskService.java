@@ -5,12 +5,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -23,7 +22,8 @@ public class TaskService {
         try {
             File file = new File(filePath);
             if (file.exists()) {
-                tasks = objectMapper.readValue(file, new TypeReference<List<Task>>() {});
+                tasks = objectMapper.readValue(file, new TypeReference<List<Task>>() {
+                });
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -43,22 +43,20 @@ public class TaskService {
     }
 
     public Task saveTask(Task task) {
-        task.setId(tasks.size() + 1L); // Simple ID generation
+        task.setId((long) (tasks.size() + 1)); // Simple ID generation
+        task.setStatus("pending");
         tasks.add(task);
         saveTasks();
         return task;
     }
 
     public Task updateTask(Long id, Task task) {
-        Optional<Task> existingTaskOpt = tasks.stream().filter(t -> t.getId().equals(id)).findFirst();
-        if (existingTaskOpt.isPresent()) {
-            Task existingTask = existingTaskOpt.get();
-            existingTask.setTitle(task.getTitle());
-            existingTask.setDescription(task.getDescription());
-            existingTask.setDueDate(task.getDueDate());
-            existingTask.setCompleted(task.isCompleted());
-            saveTasks();
-            return existingTask;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getId().equals(id)) {
+                tasks.set(i, task);
+                saveTasks();
+                return task;
+            }
         }
         return null;
     }

@@ -11,3 +11,5 @@ Thumbs.db
 /backend/.vscode/
 /frontend/.vscode/
 /frontend/.env
+backend/tasks.json
+.vscode/settings.json
