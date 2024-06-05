@@ -10,8 +10,8 @@
       </div>
       <div class="form-group">
         <label for="description">Description:</label>
-        <input
-          type="text"
+        <textarea
+          rows="4"
           v-model="taskData.task.description"
           class="form-control"
         />
@@ -27,6 +27,13 @@
           taskData.errors.dueDate
         }}</span>
       </div>
+      <div v-if="taskData.task.id" class="form-group">
+        <label for="status">Status:</label>
+        <select v-model="taskData.task.status" class="form-control">
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
       <button type="submit" class="btn btn-primary">Add Task</button>
     </form>
     <div v-if="taskData.serverError" class="server-error">
@@ -36,16 +43,42 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, watch } from "vue";
 import { useTaskForm } from "@/composables/useTaskForm";
+import { Task } from "@/types/types";
 
 export default defineComponent({
-  setup(_, { emit }) {
+  props: {
+    task: {
+      type: Object as () => Task | null,
+      default: null,
+    },
+  },
+  setup(props, { emit }) {
     const { taskData, submitTaskForm } = useTaskForm();
 
+    watch(
+      () => props.task,
+      (newTask) => {
+        if (newTask) {
+          taskData.task = { ...newTask };
+        } else {
+          taskData.task = {
+            title: "",
+            description: "",
+            dueDate: "",
+            status: "pending",
+          };
+        }
+      },
+      { immediate: true }
+    );
+
     const submitForm = async () => {
-      await submitTaskForm();
-      emit("task-created");
+      const isSuccess = await submitTaskForm(taskData.task.id);
+      if (isSuccess) {
+        emit("task-created");
+      }
     };
 
     return {

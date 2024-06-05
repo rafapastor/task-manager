@@ -45,3 +45,19 @@
 .btn-danger {
   @apply mt-2 bg-red-500 text-white p-2 rounded-md hover:bg-red-700;
 }
+
+.task-actions {
+  @apply flex justify-between space-x-2;
+}
+
+.task-btn {
+  @apply w-1/2 p-2 rounded-md text-white;
+}
+
+.task-btn-edit {
+  @apply bg-blue-500 hover:bg-blue-700;
+}
+
+.task-btn-delete {
+  @apply bg-red-500 hover:bg-red-700;
+}

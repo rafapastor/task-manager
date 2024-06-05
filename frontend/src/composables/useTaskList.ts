@@ -1,18 +1,6 @@
 import { reactive } from "vue";
 import axios from "axios";
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  dueDate: string;
-  status: string;
-}
-
-interface TaskListData {
-  tasks: Task[];
-  error: string;
-}
+import { TaskListData } from "@/types/types";
 
 export function useTaskList() {
   const taskListData = reactive<TaskListData>({

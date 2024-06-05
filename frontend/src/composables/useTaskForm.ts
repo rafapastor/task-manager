@@ -1,17 +1,6 @@
 import { reactive } from "vue";
 import axios from "axios";
-
-interface Task {
-  title: string;
-  description: string;
-  dueDate: string;
-}
-
-interface TaskData {
-  task: Task;
-  errors: Record<string, string>;
-  serverError: string;
-}
+import { TaskData } from "@/types/types";
 
 export function useTaskForm() {
   const taskData = reactive<TaskData>({
@@ -19,31 +8,31 @@ export function useTaskForm() {
       title: "",
       description: "",
       dueDate: "",
+      status: "pending",
     },
     errors: {},
     serverError: "",
   });
 
-  const submitTaskForm = async () => {
+  const submitTaskForm = async (id?: number): Promise<boolean> => {
     try {
       taskData.errors = {}; // Clear previous errors
       taskData.serverError = ""; // Clear previous server errors
-      const response = await axios.post(
-        "http://localhost:8080/tasks",
-        taskData.task
-      );
-      console.log(response.data); // Handle success (e.g., redirect or clear form)
-      // Optionally, you can reset the form fields here
-      taskData.task.title = "";
-      taskData.task.description = "";
-      taskData.task.dueDate = "";
+      if (id) {
+        await axios.put(`http://localhost:8080/tasks/${id}`, taskData.task);
+      } else {
+        const { status, ...taskWithoutStatus } = taskData.task; // Remove status field for new tasks
+        await axios.post("http://localhost:8080/tasks", taskWithoutStatus);
+      }
+      return true;
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
         taskData.errors = error.response.data; // Handle validation errors
       } else {
         taskData.serverError =
-          "An error occurred while adding the task. Please try again later."; // Handle other errors
+          "An error occurred while saving the task. Please try again later."; // Handle other errors
       }
+      return false;
     }
   };
 
