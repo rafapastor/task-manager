@@ -1,20 +1,37 @@
 <template>
   <div id="app" class="container mx-auto">
-    <TaskList />
+    <CreateTask @task-created="fetchTasks" />
+    <TaskList ref="taskList" />
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref } from "vue";
+import CreateTask from "./components/CreateTask.vue";
 import TaskList from "./components/TaskList.vue";
+import "./assets/styles.css";
 
-export default {
+export default defineComponent({
   name: "App",
   components: {
+    CreateTask,
     TaskList,
   },
-};
+  setup() {
+    const taskListRef = ref<InstanceType<typeof TaskList> | null>(null);
+
+    const fetchTasks = () => {
+      taskListRef.value?.fetchTasks();
+    };
+
+    return {
+      taskListRef,
+      fetchTasks,
+    };
+  },
+});
 </script>
 
 <style>
-/* Agrega tus estilos aquí si es necesario */
+/* Puedes agregar estilos globales aquí si lo deseas */
 </style>
