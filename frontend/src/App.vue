@@ -9,6 +9,7 @@
 import { defineComponent, ref } from "vue";
 import CreateTask from "./components/CreateTask.vue";
 import TaskList from "./components/TaskList.vue";
+import "./assets/tailwind.css";
 import "./assets/styles.css";
 
 export default defineComponent({
