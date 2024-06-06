@@ -1,11 +1,11 @@
 package com.example.taskmanager.service;
 
+import com.example.taskmanager.dto.CreateTaskDTO;
+import com.example.taskmanager.dto.UpdateTaskDTO;
 import com.example.taskmanager.model.Task;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,56 +13,64 @@ import java.util.List;
 
 @Service
 public class TaskService {
-    private final String filePath = "tasks.json";
+
+    private static final String FILE_PATH = "tasks.json";
     private List<Task> tasks = new ArrayList<>();
-    private ObjectMapper objectMapper = new ObjectMapper();
 
-    @PostConstruct
-    private void loadTasks() {
-        try {
-            File file = new File(filePath);
-            if (file.exists()) {
-                tasks = objectMapper.readValue(file, new TypeReference<List<Task>>() {
-                });
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void saveTasks() {
-        try {
-            objectMapper.writeValue(new File(filePath), tasks);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public TaskService() {
+        loadTasks();
     }
 
     public List<Task> getAllTasks() {
         return tasks;
     }
 
-    public Task saveTask(Task task) {
-        task.setId((long) (tasks.size() + 1)); // Simple ID generation
-        task.setStatus("pending");
+    public Task createTask(CreateTaskDTO createTaskDTO) {
+        Task task = new Task();
+        task.setTitle(createTaskDTO.getTitle());
+        task.setDescription(createTaskDTO.getDescription());
+        task.setDueDate(createTaskDTO.getDueDate());
+        task.setStatus("pending"); // Status is set to "pending" by default
+        task.setId((long) (tasks.size() + 1));
         tasks.add(task);
         saveTasks();
         return task;
     }
 
-    public Task updateTask(Long id, Task task) {
-        for (int i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).getId().equals(id)) {
-                tasks.set(i, task);
-                saveTasks();
-                return task;
-            }
-        }
-        return null;
+    public Task updateTask(Long id, UpdateTaskDTO updateTaskDTO) {
+        Task task = tasks.stream().filter(t -> t.getId().equals(id)).findFirst()
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        task.setTitle(updateTaskDTO.getTitle());
+        task.setDescription(updateTaskDTO.getDescription());
+        task.setDueDate(updateTaskDTO.getDueDate());
+        task.setStatus(updateTaskDTO.getStatus()); // Status is updated from DTO
+        saveTasks();
+        return task;
     }
 
     public void deleteTask(Long id) {
-        tasks.removeIf(t -> t.getId().equals(id));
+        tasks.removeIf(task -> task.getId().equals(id));
         saveTasks();
+    }
+
+    private void loadTasks() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            File file = new File(FILE_PATH);
+            if (file.exists()) {
+                tasks = mapper.readValue(file, mapper.getTypeFactory().constructCollectionType(List.class, Task.class));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void saveTasks() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File(FILE_PATH), tasks);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

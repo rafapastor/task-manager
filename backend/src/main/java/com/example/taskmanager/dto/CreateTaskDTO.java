@@ -1,21 +1,23 @@
-package com.example.taskmanager.model;
+package com.example.taskmanager.dto;
 
-public class Task {
-    private Long id;
+import com.example.taskmanager.validation.ValidDueDate;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
+public class CreateTaskDTO {
+    @NotBlank(message = "Title is mandatory")
     private String title;
+
     private String description;
+
+    @NotNull(message = "Due date is mandatory")
+    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Due date must be in the format YYYY-MM-DD")
+    @ValidDueDate
     private String dueDate;
-    private String status;
 
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -38,13 +40,5 @@ public class Task {
 
     public void setDueDate(String dueDate) {
         this.dueDate = dueDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }

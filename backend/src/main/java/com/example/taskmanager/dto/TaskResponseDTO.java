@@ -1,6 +1,6 @@
-package com.example.taskmanager.model;
+package com.example.taskmanager.dto;
 
-public class Task {
+public class TaskResponseDTO {
     private Long id;
     private String title;
     private String description;
