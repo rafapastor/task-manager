@@ -21,11 +21,11 @@ export function useTaskForm() {
       if (id) {
         await axios.put(`http://localhost:8080/tasks/${id}`, taskData.task);
       } else {
-        const { status, ...taskWithoutStatus } = taskData.task; // Remove status field for new tasks
+        const { status, ...taskWithoutStatus } = taskData.task; // eslint-disable-line
         await axios.post("http://localhost:8080/tasks", taskWithoutStatus);
       }
       return true;
-    } catch (error: any) {
+    } catch (error: any) { // eslint-disable-line
       if (error.response && error.response.status === 400) {
         taskData.errors = error.response.data; // Handle validation errors
       } else {

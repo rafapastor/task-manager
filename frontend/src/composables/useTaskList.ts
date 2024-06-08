@@ -12,7 +12,7 @@ export function useTaskList() {
     try {
       const response = await axios.get("http://localhost:8080/tasks");
       taskListData.value.tasks = response.data;
-    } catch (error: any) {
+    } catch (error: any) { // eslint-disable-line
       taskListData.value.error = "An error occurred while fetching tasks.";
     }
   };
@@ -23,7 +23,7 @@ export function useTaskList() {
       taskListData.value.tasks = taskListData.value.tasks.filter(
         (task) => task.id !== id
       );
-    } catch (error: any) {
+    } catch (error: any) { // eslint-disable-line
       taskListData.value.error = "An error occurred while deleting the task.";
     }
   };

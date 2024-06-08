@@ -12,14 +12,14 @@
       :task-list-data="taskListData"
     />
 
-    <TaskModal :isOpen="isModalOpen" @close="closeModal" title="Create Task">
+    <TaskModal :isOpen="isModalOpen" @close="closeModal" :title="modalTitle">
       <CreateTask @task-created="handleTaskCreated" :task="currentTask" />
     </TaskModal>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 import CreateTask from "./components/CreateTask.vue";
 import TaskList from "./components/TaskList.vue";
 import TaskModal from "./components/TaskModal.vue";
@@ -68,6 +68,10 @@ export default defineComponent({
       fetchTasks();
     };
 
+    const modalTitle = computed(() => {
+      return currentTask.value ? "Update Task" : "Create Task";
+    });
+
     return {
       isModalOpen,
       openModal,
@@ -77,6 +81,7 @@ export default defineComponent({
       handleDeleteTask,
       currentTask,
       taskListData,
+      modalTitle,
     };
   },
 });
