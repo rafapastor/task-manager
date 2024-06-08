@@ -34,7 +34,9 @@
           <option value="completed">Completed</option>
         </select>
       </div>
-      <button type="submit" class="btn btn-primary">Add Task</button>
+      <button type="submit" class="btn btn-primary">
+        {{ taskData.task.id ? "Update Task" : "Create Task" }}
+      </button>
     </form>
     <div v-if="taskData.serverError" class="server-error">
       {{ taskData.serverError }}
@@ -59,9 +61,9 @@ export default defineComponent({
 
     watch(
       () => props.task,
-      (newTask) => {
-        if (newTask) {
-          taskData.task = { ...newTask };
+      (currentTask) => {
+        if (currentTask) {
+          taskData.task = { ...currentTask };
         } else {
           taskData.task = {
             title: "",

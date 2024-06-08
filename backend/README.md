@@ -43,7 +43,7 @@ Run the Spring Boot application:
 mvn spring-boot:run
 ```
 
-The application will start on **http://localhost:8080**
+The application will start on **`http://localhost:8080`**
 
 ## API Endpoints
 
@@ -73,3 +73,71 @@ The application will start on **http://localhost:8080**
 }
 
 ```
+
+### Get all Tasks
+
+- **URL: `/tasks`**
+- **Method: `GET`**
+- **Response**
+
+```bash
+[
+  {
+    "id": 1,
+    "title": "Task Title",
+    "description": "Task Description",
+    "dueDate": "YYYY-MM-DD",
+    "status": "pending"
+  },
+  ...
+]
+```
+
+### Update a Task
+
+- **URL: `/tasks/{id}`**
+- **Method: `PUT`**
+- **Request Body**
+
+```bash
+{
+  "title": "Updated Task Title",
+  "description": "Updated Task Description",
+  "dueDate": "YYYY-MM-DD",
+  "status": "completed" // or "pending"
+}
+
+```
+
+- **Response**
+
+```bash
+{
+  "id": 1,
+  "title": "Updated Task Title",
+  "description": "Updated Task Description",
+  "dueDate": "YYYY-MM-DD",
+  "status": "completed"
+}
+```
+
+### Delete a Task
+
+- **URL: `/tasks/{id}`**
+- **Method: `DELETE`**
+
+## Running Tests
+
+### Unit Tests
+
+To run the unit tests, use the following command:
+
+```bash
+mvn test
+```
+
+### Project Structure
+
+- **`src/main/java/com/example/taskmanager`**: Main application code.
+- **`src/main/resources`**: Configuration files.
+- **`src/test/java/com/example/taskmanager`**: Test code.

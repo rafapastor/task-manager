@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks")
+@CrossOrigin(origins = "http://localhost:8081") // Allow CORS for frontend
 public class TaskController {
 
     @Autowired

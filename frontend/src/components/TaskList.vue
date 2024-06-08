@@ -13,7 +13,7 @@
           <button @click="editTask(task)" class="task-btn task-btn-edit">
             Edit
           </button>
-          <button @click="deleteTask(task.id)" class="task-btn task-btn-delete">
+          <button @click="deleteTask(task)" class="task-btn task-btn-delete">
             Delete
           </button>
         </div>
@@ -24,29 +24,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
-import { useTaskList } from "@/composables/useTaskList";
+import { PropType, defineComponent } from "vue";
 import { Task } from "@/types/types";
 
 export default defineComponent({
   name: "TaskList",
-  emits: ["edit-task"],
+  props: {
+    taskListData: {
+      type: Object as PropType<{ tasks: Task[]; error: string | null }>,
+      required: true,
+    },
+  },
+  emits: ["edit-task", "delete-task"],
   setup(_, { emit }) {
-    const { taskListData, fetchTasks, deleteTask } = useTaskList();
-
-    onMounted(() => {
-      fetchTasks();
-    });
-
     const editTask = (task: Task) => {
       emit("edit-task", task);
     };
 
+    const deleteTask = (task: Task) => {
+      emit("delete-task", task);
+    };
+
     return {
-      taskListData,
-      fetchTasks,
-      deleteTask,
+      //deleteTask,
       editTask,
+      deleteTask,
     };
   },
 });

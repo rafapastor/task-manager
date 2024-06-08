@@ -6,7 +6,11 @@
     >
       Create Task
     </button>
-    <TaskList ref="taskList" @edit-task="handleEditTask" />
+    <TaskList
+      @edit-task="handleEditTask"
+      @delete-task="handleDeleteTask"
+      :task-list-data="taskListData"
+    />
 
     <TaskModal :isOpen="isModalOpen" @close="closeModal" title="Create Task">
       <CreateTask @task-created="handleTaskCreated" :task="currentTask" />
@@ -15,13 +19,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import CreateTask from "./components/CreateTask.vue";
 import TaskList from "./components/TaskList.vue";
 import TaskModal from "./components/TaskModal.vue";
 import { Task } from "@/types/types";
-import "./assets/tailwind.css";
 import "./assets/styles.css";
+import { useTaskList } from "./composables/useTaskList";
 
 export default defineComponent({
   name: "App",
@@ -31,9 +35,13 @@ export default defineComponent({
     TaskModal,
   },
   setup() {
+    const { taskListData, fetchTasks, deleteTask } = useTaskList();
     const isModalOpen = ref(false);
-    const taskListRef = ref<InstanceType<typeof TaskList> | null>(null);
     const currentTask = ref<Task | null>(null);
+
+    onMounted(() => {
+      fetchTasks();
+    });
 
     const openModal = () => {
       isModalOpen.value = true;
@@ -46,9 +54,7 @@ export default defineComponent({
 
     const handleTaskCreated = () => {
       closeModal();
-      if (taskListRef.value) {
-        taskListRef.value.fetchTasks();
-      }
+      fetchTasks();
     };
 
     const handleEditTask = (task: Task) => {
@@ -56,14 +62,21 @@ export default defineComponent({
       openModal();
     };
 
+    const handleDeleteTask = async (task: Task) => {
+      if (!task.id) return;
+      await deleteTask(task.id);
+      fetchTasks();
+    };
+
     return {
       isModalOpen,
-      taskListRef,
       openModal,
       closeModal,
       handleTaskCreated,
       handleEditTask,
+      handleDeleteTask,
       currentTask,
+      taskListData,
     };
   },
 });

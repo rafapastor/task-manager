@@ -31,7 +31,11 @@ public class TaskService {
         task.setDescription(createTaskDTO.getDescription());
         task.setDueDate(createTaskDTO.getDueDate());
         task.setStatus("pending"); // Status is set to "pending" by default
-        task.setId((long) (tasks.size() + 1));
+        if (tasks.isEmpty()) {
+            task.setId(1L);
+        } else {
+            task.setId(tasks.get(tasks.size() - 1).getId() + 1);
+        }
         tasks.add(task);
         saveTasks();
         return task;

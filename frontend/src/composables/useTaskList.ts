@@ -1,9 +1,9 @@
-import { reactive } from "vue";
+import { ref } from "vue";
 import axios from "axios";
 import { TaskListData } from "@/types/types";
 
 export function useTaskList() {
-  const taskListData = reactive<TaskListData>({
+  const taskListData = ref<TaskListData>({
     tasks: [],
     error: "",
   });
@@ -11,18 +11,20 @@ export function useTaskList() {
   const fetchTasks = async () => {
     try {
       const response = await axios.get("http://localhost:8080/tasks");
-      taskListData.tasks = response.data;
+      taskListData.value.tasks = response.data;
     } catch (error: any) {
-      taskListData.error = "An error occurred while fetching tasks.";
+      taskListData.value.error = "An error occurred while fetching tasks.";
     }
   };
 
   const deleteTask = async (id: number) => {
     try {
       await axios.delete(`http://localhost:8080/tasks/${id}`);
-      taskListData.tasks = taskListData.tasks.filter((task) => task.id !== id);
+      taskListData.value.tasks = taskListData.value.tasks.filter(
+        (task) => task.id !== id
+      );
     } catch (error: any) {
-      taskListData.error = "An error occurred while deleting the task.";
+      taskListData.value.error = "An error occurred while deleting the task.";
     }
   };
 
