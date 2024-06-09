@@ -68,3 +68,7 @@ yarn serve
 ```
 
 The frontend application will start on **http://localhost:8081**
+
+### Link documentation
+
+**https://docs.google.com/document/d/1vgh4yyVzRcdunhdl_3a8arWbdxJu7uoZFPT2yAAxJW4/edit?usp=sharing**
