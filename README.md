@@ -72,3 +72,7 @@ The frontend application will start on **http://localhost:8081**
 ### Link documentation
 
 **https://docs.google.com/document/d/1vgh4yyVzRcdunhdl_3a8arWbdxJu7uoZFPT2yAAxJW4/edit?usp=sharing**
+
+### Link presentation
+
+**https://docs.google.com/presentation/d/1BQcshkoeWxsW5yV-r3Mz6At08xc2MZX4_YEkO3-jlKU/edit?usp=sharing**
