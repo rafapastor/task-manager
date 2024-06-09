@@ -9,13 +9,6 @@ This is the backend for a task management application, developed with Spring Boo
 
 ## Project Setup
 
-### Clone the Repository
-
-```bash
-git clone <YOUR_REPOSITORY_URL>
-cd task-manager-backend
-```
-
 ### Set Up the Environment
 
 Ensure you have Java 17 and Maven installed on your system. You can check your Java and Maven versions with the following commands:
